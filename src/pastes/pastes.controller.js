@@ -72,6 +72,7 @@ function pasteExists(req, res, next) {
   const { pasteId } = req.params;
   const foundPaste = pastes.find((paste) => paste.id === Number(pasteId));
   if (foundPaste) {
+    res.locals.paste = foundPaste;
     return next();
   }
   next({
@@ -82,13 +83,13 @@ function pasteExists(req, res, next) {
 
 function read(req, res) {
   const { pasteId } = req.params;
-  const foundPaste = pastes.find((paste) => paste.id === Number(pasteId));
+  const paste = res.locals.paste;
   res.json({ data: foundPaste });
 }
 
 function update(req, res) {
   const { pasteId } = req.params;
-  const foundPaste = pastes.find((paste) => paste.id === Number(pasteId));
+  const paste = res.locals.paste;
   const { data: { name, syntax, expiration, exposure, text } = {} } = req.body;
 
   // update the paste
